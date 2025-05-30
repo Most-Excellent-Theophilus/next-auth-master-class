@@ -3,13 +3,13 @@
  * These routes do not require authentication
  * @type {string[]}
  */
-const publicRoutes = ["/"];
+const publicRoutes = ["/", "/new-verification"];
 /**
  * An array of routes that are used for authentication
  * These routes will redirect logged in users to /settings
  * @type {string[]}
  */
-const authRoutes = ["/login", "/register"];
+const authRoutes = ["/login", "/register", "/error", "/reset", "/new-password"];
 
 /**
  * The Prefix for API authentication routes
