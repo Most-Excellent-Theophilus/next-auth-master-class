@@ -5,7 +5,7 @@ import { LoginSchema } from "@/schemas";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 import type * as z from "zod";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import { getUserByEmail } from "@/data/user";
 import {
   generateTwoFactorToken,
@@ -16,7 +16,10 @@ import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail";
 import { db } from "@/lib/db";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 
-export const login = async (values: z.infer<typeof LoginSchema>) => {
+export const login = async (
+  values: z.infer<typeof LoginSchema>,
+  callBackUrl?: string | null
+) => {
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -92,7 +95,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     await signIn("credentials", {
       email,
       password,
-      redirect: false, // Don't let NextAuth handle redirect
+      redirectTo: callBackUrl || DEFAULT_LOGIN_REDIRECT, // Don't let NextAuth handle redirect
     });
   } catch (error) {
     if (error instanceof AuthError) {
@@ -107,5 +110,5 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   }
 
   // Handle redirect manually
-  redirect(DEFAULT_LOGIN_REDIRECT);
+  // redirect();
 };
